@@ -23,6 +23,18 @@ Content-Type: application/pdf
 --WebAppBoundary--
 
 ###
+### microservices-on-aws.pdf
+POST http://localhost:8086/rest/v1/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="microservices-on-aws.pdf"
+Content-Type: application/pdf
+
+< ./microservices-on-aws.pdf
+--WebAppBoundary--
+
+###
 POST http://localhost:8086/restv1/v1/load-url
 Content-Type: application/json
 
