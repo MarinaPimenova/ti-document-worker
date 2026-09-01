@@ -15,11 +15,11 @@ question-generation:
     target-chars: 12_000
     max-chars: 18_000
     min-chars: 2_000
-    heading-pattern: '^(?:\d+(?:\.\d+)*[.)]?\s+.+|(?:CHAPTER|Chapter|CHAPTER)\s+.+)$'
+    #heading-pattern: '^(?:\d+(?:\.\d+)*[.)]?\s+.+|(?:CHAPTER|Chapter|CHAPTER)\s+.+)$'
 
 ti:
   upload:
-    storage-path: ${TI_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/ti-uploads}
+    storage-path: ${UPLOAD_STORAGE_PATH:${java.io.tmpdir}/ti-uploads}
 
 spring:
   application:
@@ -66,19 +66,19 @@ spring:
         completions-path: "${OPEN_AI_COMPLETIONS_PATH:/openai/deployments/gpt-4.1-mini-2025-04-14/chat/completions}"
       embedding:
         options:
-          model: "text-embedding-ada-002"
+          model: "${EMBEDDING_MODEL:text-embedding-ada-002}"
         embeddings-path: "${OPEN_AI_EMBEDDINGS_PATH:/openai/deployments/text-embedding-ada-002/embeddings}"
+
 openai:
   image-model: "${IMAGE_MODEL:anthropic.claude-v3-haiku}" #gpt-4-vision-preview
   image-completions-path: "${IMAGE_AI_COMPLETIONS_PATH:/openai/deployments/anthropic.claude-v3-haiku/chat/completions}"
 
 datasource:
   pgvector:
-    jdbcUrl: "${PGVECTOR_URL:jdbc:postgresql://localhost:5433/document_db}" #?stringtype=unspecified # 5433
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    jdbcUrl: "${DOCUMENT_DB_URL:jdbc:postgresql://localhost:5433/document_db}" #?stringtype=unspecified # 5433
+    username: ${DOCUMENT_USER:postgres}
+    password: ${DOCUMENT_PASSWORD:postgres}
     driverClassName: org.postgresql.Driver
-
 
 group:
   admin: ${ADMINS}
