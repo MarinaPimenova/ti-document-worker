@@ -48,7 +48,6 @@ spring:
     password: ${RABBITMQ_PASS:admin}
 
   ai:
-    # Moved to hyphenated vector-store namespace in Spring AI 2.x
     vectorstore:
       pgvector:
         index-type: HNSW
