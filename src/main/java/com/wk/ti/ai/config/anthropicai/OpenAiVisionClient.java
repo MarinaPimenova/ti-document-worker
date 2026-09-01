@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-
 public class OpenAiVisionClient {
 
     private final AIConfig aiConfig;
@@ -33,7 +32,6 @@ public class OpenAiVisionClient {
 
     public String ask(List<Map<String, Object>> content) {
         String apiKey = aiConfig.getApiKey();
-
         String baseUrl = aiConfig.getBaseUrl();
 
         try {

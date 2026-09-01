@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class MistralAiApiConfig {
+
     private final MistralAiConfig mistralAiConfig;
 
     @Bean
@@ -22,11 +23,11 @@ public class MistralAiApiConfig {
 
     @Bean
     public EmbeddingModel embeddingModel(MistralAiApi mistralAiApi) {
-
         MistralAiEmbeddingOptions options = MistralAiEmbeddingOptions.builder()
-                .withModel("mistral-embed")
-                .withEncodingFormat("float")
+                .model("mistral-embed")
+                .encodingFormat("float")
                 .build();
+
         return MistralAiEmbeddingModel.builder()
                 .mistralAiApi(mistralAiApi)
                 .options(options)
