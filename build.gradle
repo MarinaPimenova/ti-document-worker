@@ -42,7 +42,6 @@ dependencies {
 
     // Spring AI
     implementation 'org.springframework.boot:spring-boot-starter-restclient'
-    //implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory'
     implementation 'org.springframework.ai:spring-ai-client-chat'
     implementation 'org.springframework.ai:spring-ai-openai'
     implementation 'com.openai:openai-java-client-okhttp:4.49.0'

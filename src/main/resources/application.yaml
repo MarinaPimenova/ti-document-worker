@@ -10,6 +10,11 @@ info:
     name: ti-document-worker
     version: '@project.version@'
 
+http:
+  client:
+    connect-timeout: ${HTTP_CLIENT_CONNECT_TIMEOUT:5000}
+    read-timeout: ${HTTP_CLIENT_READ_TIMEOUT:120000}
+
 question-generation:
   section:
     target-chars: 12_000

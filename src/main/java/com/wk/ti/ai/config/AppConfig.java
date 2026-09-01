@@ -1,4 +1,4 @@
-package com.wk.ti.configuration;
+package com.wk.ti.ai.config;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import org.springframework.web.filter.RequestContextFilter;
 
-@SuppressWarnings("ConstantValue")
 @Configuration
 public class AppConfig {
 
@@ -52,38 +51,4 @@ public class AppConfig {
                 .requestInterceptor(new LLMRetryInterceptor(gptCompletionUrl))
                 .requestInterceptor(new DetailedLLMLoggingInterceptor(objectMapper));
     }
-
-//    @Bean
-//    public RestTemplate llmRestTemplate(
-//            SimpleClientHttpRequestFactory simpleClientHttpRequestFactory,
-//            ObjectMapper objectMapper,
-//            @Value("${spring.ai.openai.chat.completions-path}") String gptCompletionUrl) {
-//        RestTemplate restTemplate = new RestTemplate(
-//                new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory)
-//        );
-//
-//        restTemplate.setInterceptors(
-//                List.of(
-//                        new LLMRetryInterceptor(gptCompletionUrl),
-//                        new DetailedLLMLoggingInterceptor(objectMapper)
-//                ));
-//
-//        return restTemplate;
-//    }
-
-//
-//    // Create a RestClient.Builder that is configured to use your RestTemplate's factory and interceptors
-//    @Bean
-//    public RestClient.Builder llmRestClientBuilder(RestTemplate llmRestTemplate) {
-//        RestClient.Builder builder = RestClient.builder();
-//        // Set the request factory from your RestTemplate
-//        builder.requestFactory(llmRestTemplate.getRequestFactory());
-//        // Explicitly add interceptors from RestTemplate to RestClient.Builder
-//        if (llmRestTemplate.getInterceptors() != null) {
-//            for (ClientHttpRequestInterceptor interceptor : llmRestTemplate.getInterceptors()) {
-//                builder.requestInterceptor(interceptor);
-//            }
-//        }
-//        return builder;
-//    }
 }
