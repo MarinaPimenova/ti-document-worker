@@ -1,7 +1,7 @@
 package com.wk.ti.upload;
 
 import com.wk.ti.exception.StorageException;
-import com.wk.ti.upload.config.StorageProperties;
+import com.wk.ti.etl.config.StorageProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,41 +35,28 @@ public class FileStorageService {
         }
 
         try {
-            Path uploadDirectory =
-                    Paths.get(storageProperties.getStoragePath())
+            Path uploadDirectory = Paths.get(storageProperties.getStoragePath())
                             .toAbsolutePath()
                             .normalize();
 
             Files.createDirectories(uploadDirectory);
-
             Path filePath = uploadDirectory
                     .resolve(Paths.get(originalFilename).getFileName())
                     .normalize();
-
             // Prevent path traversal:
             if (!filePath.startsWith(uploadDirectory)) {
                 throw new StorageException("Invalid filename: " + originalFilename);
             }
-
-            Files.copy(
-                    file.getInputStream(),
+            Files.copy(file.getInputStream(),
                     filePath,
-                    StandardCopyOption.REPLACE_EXISTING
-            );
+                    StandardCopyOption.REPLACE_EXISTING);
 
-            log.info(
-                    "File '{}' stored at '{}'",
-                    originalFilename,
-                    filePath
-            );
+            log.info("File '{}' stored at '{}'", originalFilename, filePath);
 
             return filePath.toFile();
 
         } catch (IOException e) {
-            throw new StorageException(
-                    "Failed to store file: " + originalFilename,
-                    e
-            );
+            throw new StorageException("Failed to store file: " + originalFilename, e);
         }
     }
 }

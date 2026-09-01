@@ -12,9 +12,9 @@ info:
 
 question-generation:
   section:
-    target-chars: 12000
-    max-chars: 18000
-    min-chars: 2000
+    target-chars: 12_000
+    max-chars: 18_000
+    min-chars: 2_000
     heading-pattern: '^(?:\d+(?:\.\d+)*[.)]?\s+.+|(?:CHAPTER|Chapter|CHAPTER)\s+.+)$'
 
 ti:
@@ -41,7 +41,9 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER:admin}
     password: ${RABBITMQ_PASS:admin}
+
   ai:
+    # Moved to hyphenated vector-store namespace in Spring AI 2.x
     vectorstore:
       pgvector:
         index-type: HNSW
@@ -51,17 +53,21 @@ spring:
         schema-name: public
         table-name: vector_store
         max-document-batch-size: 10000
+
     mistralai:
       api-key: ${MISTRAL_AI_API_KEY}
+
     openai:
       api-key: ${OPEN_AI_API_KEY}
       base-url: ${OPEN_AI_ENDPOINT:https://ai-proxy.lab.epam.com}
       chat:
+        options:
+          model: "${CHAT_MODEL:gpt-4.1-mini-2025-04-14}"
         completions-path: "${OPEN_AI_COMPLETIONS_PATH:/openai/deployments/gpt-4.1-mini-2025-04-14/chat/completions}"
-        model: "${CHAT_MODEL:gpt-4.1-mini-2025-04-14}" # gpt-4-turbo
-        base-url: ${OPEN_AI_ENDPOINT:https://ai-proxy.lab.epam.com}
-        embeddings-path: /openai/deployments/text-embedding-ada-002/embeddings
-
+      embedding:
+        options:
+          model: "text-embedding-ada-002"
+        embeddings-path: "${OPEN_AI_EMBEDDINGS_PATH:/openai/deployments/text-embedding-ada-002/embeddings}"
 openai:
   image-model: "${IMAGE_MODEL:anthropic.claude-v3-haiku}" #gpt-4-vision-preview
   image-completions-path: "${IMAGE_AI_COMPLETIONS_PATH:/openai/deployments/anthropic.claude-v3-haiku/chat/completions}"

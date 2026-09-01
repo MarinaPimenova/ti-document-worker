@@ -5,16 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wk.ti.ai.logger.interceptor.DetailedLLMLoggingInterceptor;
 import com.wk.ti.ai.logger.interceptor.LLMRetryInterceptor;
 import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.boot.restclient.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.filter.RequestContextFilter;
 
-import java.util.List;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+
+import org.springframework.web.filter.RequestContextFilter;
 
 @SuppressWarnings("ConstantValue")
 @Configuration
@@ -43,35 +42,48 @@ public class AppConfig {
     }
 
     @Bean
-    public RestTemplate llmRestTemplate(
+    public RestClientCustomizer llmRestClientCustomizer(
             SimpleClientHttpRequestFactory simpleClientHttpRequestFactory,
             ObjectMapper objectMapper,
             @Value("${spring.ai.openai.chat.completions-path}") String gptCompletionUrl) {
-        RestTemplate restTemplate = new RestTemplate(
-                new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory)
-        );
 
-        restTemplate.setInterceptors(
-                List.of(
-                        new LLMRetryInterceptor(gptCompletionUrl),
-                        new DetailedLLMLoggingInterceptor(objectMapper)
-                ));
-
-        return restTemplate;
+        return restClientBuilder -> restClientBuilder
+                .requestFactory(new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory))
+                .requestInterceptor(new LLMRetryInterceptor(gptCompletionUrl))
+                .requestInterceptor(new DetailedLLMLoggingInterceptor(objectMapper));
     }
 
-    // Create a RestClient.Builder that is configured to use your RestTemplate's factory and interceptors
-    @Bean
-    public RestClient.Builder llmRestClientBuilder(RestTemplate llmRestTemplate) {
-        RestClient.Builder builder = RestClient.builder();
-        // Set the request factory from your RestTemplate
-        builder.requestFactory(llmRestTemplate.getRequestFactory());
-        // Explicitly add interceptors from RestTemplate to RestClient.Builder
-        if (llmRestTemplate.getInterceptors() != null) {
-            for (ClientHttpRequestInterceptor interceptor : llmRestTemplate.getInterceptors()) {
-                builder.requestInterceptor(interceptor);
-            }
-        }
-        return builder;
-    }
+//    @Bean
+//    public RestTemplate llmRestTemplate(
+//            SimpleClientHttpRequestFactory simpleClientHttpRequestFactory,
+//            ObjectMapper objectMapper,
+//            @Value("${spring.ai.openai.chat.completions-path}") String gptCompletionUrl) {
+//        RestTemplate restTemplate = new RestTemplate(
+//                new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory)
+//        );
+//
+//        restTemplate.setInterceptors(
+//                List.of(
+//                        new LLMRetryInterceptor(gptCompletionUrl),
+//                        new DetailedLLMLoggingInterceptor(objectMapper)
+//                ));
+//
+//        return restTemplate;
+//    }
+
+//
+//    // Create a RestClient.Builder that is configured to use your RestTemplate's factory and interceptors
+//    @Bean
+//    public RestClient.Builder llmRestClientBuilder(RestTemplate llmRestTemplate) {
+//        RestClient.Builder builder = RestClient.builder();
+//        // Set the request factory from your RestTemplate
+//        builder.requestFactory(llmRestTemplate.getRequestFactory());
+//        // Explicitly add interceptors from RestTemplate to RestClient.Builder
+//        if (llmRestTemplate.getInterceptors() != null) {
+//            for (ClientHttpRequestInterceptor interceptor : llmRestTemplate.getInterceptors()) {
+//                builder.requestInterceptor(interceptor);
+//            }
+//        }
+//        return builder;
+//    }
 }

@@ -44,7 +44,6 @@ public class BufferingClientHttpResponseWrapper implements ClientHttpResponse {
         return HttpStatus.valueOf(statusCode);
     }
 
-
     @Override
     public String getStatusText() throws IOException {
         return response.getStatusText();

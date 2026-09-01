@@ -12,13 +12,27 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 @Validated
 public class AIConfig {
+    //       api-key: ${OPEN_AI_API_KEY}
+    //      base-url: ${OPEN_AI_ENDPOINT:https://ai-proxy.lab.epam.com}
+    //      chat:
+    //        options:
+    //          model: "${CHAT_MODEL:gpt-4.1-mini-2025-04-14}"
+    //        completions-path: "${OPEN_AI_COMPLETIONS_PATH:/openai/deployments/gpt-4.1-mini-2025-04-14/chat/completions}"
+    //      embedding:
+    //        options:
+    //          model: "text-embedding-ada-002"
+    //        embeddings-path: "${OPEN_AI_EMBEDDINGS_PATH:/openai/deployments/text-embedding-ada-002/embeddings}"
     @NotBlank
     private String apiKey;
+
     @NotBlank
     private String baseUrl;
+
     @NotNull
     private Chat chat;
 
+    @NotNull
+    private Embedding embedding;
 
     @Data
     @AllArgsConstructor
@@ -27,10 +41,19 @@ public class AIConfig {
     public static class Chat {
         @NotBlank
         private String completionsPath;
-        @NotBlank
-        private String model;
+
+        @NotNull
+        private Options options;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Validated
+    public static class Embedding {
         @NotBlank
         private String embeddingsPath;
+
         @NotNull
         private Options options;
     }

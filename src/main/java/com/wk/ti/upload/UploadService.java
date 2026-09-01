@@ -1,6 +1,7 @@
 package com.wk.ti.upload;
 
-import com.wk.ti.document.model.DocumentStatus;
+import com.wk.ti.etl.transform.pdf.document.model.DocumentStatus;
+import com.wk.ti.etl.extract.ETLPipelineResolver;
 import com.wk.ti.upload.model.FileProcessingResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.concurrent.Executor;
 @Slf4j
 @RequiredArgsConstructor
 public class UploadService {
-    private final DataLoaderService dataLoaderService;
+    private final ETLPipelineResolver etlPipelineResolver;
     private final FileStorageService fileStorageService;
     @Qualifier("documentProcessingExecutor")
     private final Executor executor;
@@ -38,20 +39,16 @@ public class UploadService {
                     DocumentStatus.FAILED
             );
         }
-
+        // TODO: add exceptions handling
+        // log.error("Async parsing failed for file {}", originalFilename, e);
         CompletableFuture.runAsync(
-                () -> dataLoaderService.uploadKnowledge(uploadedFile, originalFilename),
+                () -> {
+                    etlPipelineResolver.process(uploadedFile, originalFilename);
+                    log.info("Successfully uploaded content from {}", originalFilename);
+                },
                 executor
         );
-        // 2. Pass the byte array / filename to the virtual thread
-//        Thread.startVirtualThread(() -> {
-//            try {
-//                dataLoaderService.uploadKnowledge(uploadedFile, originalFilename);
-//                log.info("Successfully uploaded content from {}", originalFilename);
-//            } catch (Exception e) {
-//                log.error("Async parsing failed for file {}", originalFilename, e);
-//            }
-//        });
+
         return new FileProcessingResponse(
                 null,
                 originalFilename,
@@ -60,19 +57,14 @@ public class UploadService {
     }
 
     public FileProcessingResponse loadFromUrl(String url) {
-        dataLoaderService.loadFromUrl(url);
+        // TODO: add exceptions handling
+        // log.error("Async parsing failed for {}", url, e);
         CompletableFuture.runAsync(
-                () -> dataLoaderService.loadFromUrl(url),
-                executor
-        );
-//        Thread.startVirtualThread(() -> {
-//            try {
-//                dataLoaderService.loadFromUrl(url);
-//                log.info("Successfully uploaded content from {}", url);
-//            } catch (Exception e) {
-//                log.error("Async parsing failed for {}", url, e);
-//            }
-//        });
+                () -> {
+                    etlPipelineResolver.loadFromUrl(url);
+                    log.info("Successfully uploaded content from {}", url);
+                }, executor);
+
         return new FileProcessingResponse(
                 null,
                 url,
