@@ -10,6 +10,17 @@ info:
     name: ti-document-worker
     version: '@project.version@'
 
+question-generation:
+  section:
+    target-chars: 12000
+    max-chars: 18000
+    min-chars: 2000
+    heading-pattern: '^(?:\d+(?:\.\d+)*[.)]?\s+.+|(?:CHAPTER|Chapter|CHAPTER)\s+.+)$'
+
+ti:
+  upload:
+    storage-path: ${TI_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/ti-uploads}
+
 spring:
   application:
     name: ${info.app.name}

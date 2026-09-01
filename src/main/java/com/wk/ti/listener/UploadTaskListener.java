@@ -1,6 +1,6 @@
 package com.wk.ti.listener;
 
-import com.wk.ti.embedding.service.DataLoaderService;
+import com.wk.ti.upload.DataLoaderService;
 import com.wk.ti.event.FileProcessingEvent;
 import com.wk.ti.event.UploadCompletedEvent;
 import com.wk.ti.event.UploadFailedEvent;
@@ -42,7 +42,7 @@ public class UploadTaskListener {
         try {
 
             dataLoaderService.uploadKnowledge(rawFile, event.originalFilename());
-            log.info("Successfully uploaded {} content from file {}", event.originalFilename());
+            log.info("Successfully uploaded content from file {}", event.originalFilename());
 
             UploadCompletedEvent successEvent = new UploadCompletedEvent(event.jobId());
             rabbitTemplate.convertAndSend(EXCHANGE, RK_COMPLETED, successEvent);

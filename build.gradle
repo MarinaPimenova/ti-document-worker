@@ -39,6 +39,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Spring Data JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
     // Spring AI
     implementation 'org.springframework.ai:spring-ai-openai'
@@ -49,9 +51,7 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-mistral-ai'
     implementation 'org.springframework.ai:spring-ai-pgvector-store'
     implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
-    // Apache Tika
-/*    implementation 'org.apache.tika:tika-core:3.2.2'
-    implementation 'org.apache.tika:tika-parsers-standard-package:3.2.2'*/
+
     implementation 'org.jsoup:jsoup:1.17.2'
 //commons-fileupload
     implementation 'commons-fileupload:commons-fileupload:1.4'
