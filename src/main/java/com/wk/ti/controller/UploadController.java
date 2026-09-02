@@ -16,7 +16,7 @@ import java.util.Map;
 public class UploadController {
     private final UploadService uploadService;
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FileProcessingResponse> upload(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(uploadService.upload(file));
     }
